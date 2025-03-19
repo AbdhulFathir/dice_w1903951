@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -86,8 +88,9 @@ class GameScreen : ComponentActivity() {
                             var resultTitle by remember { mutableStateOf("") }
                             var resultMessage by remember { mutableStateOf("") }
                             var resultColor by remember { mutableStateOf(Color.Black) }
-                            var selectedDice by remember { mutableStateOf(MutableList(5) { false }) }
                             var dialogImage by remember { mutableIntStateOf(0) }
+                            var selectedDiceIndex by remember { mutableIntStateOf(-1) }
+
 
                             fun calculateScore(dice: List<Int>): Int {
                                 var total = 0
@@ -100,16 +103,17 @@ class GameScreen : ComponentActivity() {
                             }
 
                             fun scoreTurn() {
-//                                playerScore += calculateScore(playerDice)
-//                    computerPlay()
-//                                computerScore += calculateScore(computerDice)
+                                playerScore += calculateScore(playerDice)
+  //                   computerPlay()
+                                computerScore += calculateScore(computerDice)
                                 rollCount = 0
 
-                            computerScore += 55
-                            playerScore += 55
-                            if(playerScore > 150){
-                                playerScore += 5
-                            }
+                                // to check tie break scenario
+//                            computerScore += 55
+//                            playerScore += 55
+//                            if(playerScore > 150){
+//                                playerScore += 5
+//                            }
 
                                 if (playerScore != computerScore && (playerScore >= targetScore || computerScore >= targetScore)) {
                                     resultTitle =
@@ -129,7 +133,7 @@ class GameScreen : ComponentActivity() {
                                 rollCount++
 
                                 playerDice = playerDice.mapIndexed { index, value ->
-                                    if (rollCount == 1 || !selectedDice[index]) Random.nextInt(1, 7) else value
+                                    if (selectedDiceIndex == index) value else Random.nextInt(1, 7)
                                 }
 
                                 if (rollCount == 1) {
@@ -140,6 +144,7 @@ class GameScreen : ComponentActivity() {
                                 if (playerScore >= targetScore && computerScore >= targetScore) {
                                     scoreTurn()
                                 }
+                                selectedDiceIndex = -1
                             }
 
                             fun computerPlay() {
@@ -178,15 +183,47 @@ class GameScreen : ComponentActivity() {
                             Spacer(modifier = Modifier.height(10.dp))
 
 
-                            Row {
-                                playerDice.forEach { dice ->
-                                    Image(
-                                        painter = painterResource(id = getDiceImage(dice)),
-                                        contentDescription = "Player Dice",
-                                        modifier = Modifier.size(80.dp)
-                                    )
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                playerDice.forEachIndexed { index, dice ->
+                                    Box(
+                                        modifier = Modifier
+                                            .size(80.dp)
+                                            .padding(4.dp)
+                                            .border(
+                                                width = if (selectedDiceIndex == index) 4.dp else 0.dp,
+                                                color = if (selectedDiceIndex == index) Color.Green else Color.Transparent
+                                            )
+                                            .clickable {
+                                                if(selectedDiceIndex == index ){
+                                                    selectedDiceIndex = -1
+                                                }else{ selectedDiceIndex = index
+                                                      }
+
+                                            },
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Image(
+                                            painter = painterResource(id = getDiceImage(dice)),
+                                            contentDescription = "Player Dice",
+                                            modifier = Modifier.size(80.dp)
+                                        )
+                                    }
                                 }
                             }
+
+//                            Row {
+//                                playerDice.forEach { dice ->
+//                                    Image(
+//                                        painter = painterResource(id = getDiceImage(dice)),
+//                                        contentDescription = "Player Dice",
+//                                        modifier = Modifier.size(80.dp)
+//                                    )
+//                                }
+//                            }
 
                             Spacer(modifier = Modifier.height(30.dp))
                             Text("Computer's Dice", fontSize = 24.sp, fontWeight = FontWeight.Bold)
