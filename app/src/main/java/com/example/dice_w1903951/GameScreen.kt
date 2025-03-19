@@ -50,7 +50,6 @@ class GameScreen : ComponentActivity() {
         setContent {
             Dice_w1903951Theme {
                 Scaffold(
-
                     //app bar
                     topBar = {
                         TopAppBar(
@@ -90,6 +89,8 @@ class GameScreen : ComponentActivity() {
                             var resultColor by remember { mutableStateOf(Color.Black) }
                             var dialogImage by remember { mutableIntStateOf(0) }
                             var selectedDiceIndex by remember { mutableIntStateOf(-1) }
+
+                            var totalRollCount by remember { mutableIntStateOf(0) }
 
 
                             fun calculateScore(dice: List<Int>): Int {
@@ -131,6 +132,7 @@ class GameScreen : ComponentActivity() {
                             fun rollDice() {
                                 if (rollCount >= 3) return
                                 rollCount++
+                                totalRollCount++
 
                                 playerDice = playerDice.mapIndexed { index, value ->
                                     if (selectedDiceIndex == index) value else Random.nextInt(1, 7)
@@ -198,10 +200,13 @@ class GameScreen : ComponentActivity() {
                                                 color = if (selectedDiceIndex == index) Color.Green else Color.Transparent
                                             )
                                             .clickable {
-                                                if(selectedDiceIndex == index ){
-                                                    selectedDiceIndex = -1
-                                                }else{ selectedDiceIndex = index
-                                                      }
+                                                if(totalRollCount != 0){
+                                                    selectedDiceIndex = if(selectedDiceIndex == index ){
+                                                        -1
+                                                    }else{
+                                                        index
+                                                    }
+                                                }
 
                                             },
                                         contentAlignment = Alignment.Center
