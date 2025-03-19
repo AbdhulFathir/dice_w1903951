@@ -25,6 +25,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dice_w1903951.ui.theme.Dice_w1903951Theme
 import kotlin.random.Random
-import androidx.compose.runtime.saveable.rememberSaveable
 
 
 class GameScreen : ComponentActivity() {
@@ -77,22 +77,17 @@ class GameScreen : ComponentActivity() {
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-
-
-                            var playerDice by rememberSaveable { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
-                            var computerDice by rememberSaveable { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
-                            var playerScore by rememberSaveable { mutableIntStateOf(0) }
-                            var computerScore by rememberSaveable { mutableIntStateOf(0) }
-                            var rollCount by rememberSaveable { mutableIntStateOf(0) }
-                            var showResultDialog by rememberSaveable { mutableStateOf(false) }
-                            var resultTitle by rememberSaveable { mutableStateOf("") }
-                            var resultMessage by rememberSaveable { mutableStateOf("") }
-                            var resultColor by rememberSaveable { mutableStateOf(Color.Black) }
-                            var selectedDice by rememberSaveable { mutableStateOf(MutableList(5) { false }) }
-                            var dialogImage by rememberSaveable { mutableIntStateOf(0) }
-
-
-
+                            var playerDice by remember { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
+                            var computerDice by remember { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
+                            var playerScore by remember { mutableIntStateOf(0) }
+                            var computerScore by remember { mutableIntStateOf(0) }
+                            var rollCount by remember { mutableIntStateOf(0) }
+                            var showResultDialog by remember { mutableStateOf(false) }
+                            var resultTitle by remember { mutableStateOf("") }
+                            var resultMessage by remember { mutableStateOf("") }
+                            var resultColor by remember { mutableStateOf(Color.Black) }
+                            var selectedDice by remember { mutableStateOf(MutableList(5) { false }) }
+                            var dialogImage by remember { mutableIntStateOf(0) }
 
                             fun calculateScore(dice: List<Int>): Int {
                                 var total = 0
