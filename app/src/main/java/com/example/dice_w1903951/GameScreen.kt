@@ -78,8 +78,8 @@ class GameScreen : ComponentActivity() {
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            var playerDice by remember { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
-                            var computerDice by remember { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
+                            var playerDice by remember { mutableStateOf(List(5) { 0 }) }
+                            var computerDice by remember { mutableStateOf(List(5) { 0 }) }
                             var playerScore by remember { mutableIntStateOf(0) }
                             var computerScore by remember { mutableIntStateOf(0) }
                             var rollCount by remember { mutableIntStateOf(0) }
@@ -138,9 +138,7 @@ class GameScreen : ComponentActivity() {
                                     if (selectedDiceIndex == index) value else Random.nextInt(1, 7)
                                 }
 
-                                if (rollCount == 1) {
-                                    computerDice = List(5) { Random.nextInt(1, 7) }
-                                }
+                                computerDice = List(5) { Random.nextInt(1, 7) }
 
                                 // Tie Scenario - update score every roll
                                 if (playerScore >= targetScore && computerScore >= targetScore) {
@@ -321,6 +319,7 @@ class GameScreen : ComponentActivity() {
 
 fun getDiceImage(value: Int): Int {
     return when (value) {
+        0 -> R.drawable.dice_6
         1 -> R.drawable.dice_1
         2 -> R.drawable.dice_2
         3 -> R.drawable.dice_3
