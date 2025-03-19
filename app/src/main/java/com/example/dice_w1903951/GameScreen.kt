@@ -78,8 +78,8 @@ class GameScreen : ComponentActivity() {
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            var playerDice by remember { mutableStateOf(List(5) { 0 }) }
-                            var computerDice by remember { mutableStateOf(List(5) { 0 }) }
+                            var playerDice by remember { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
+                            var computerDice by remember { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
                             var playerScore by remember { mutableIntStateOf(0) }
                             var computerScore by remember { mutableIntStateOf(0) }
                             var rollCount by remember { mutableIntStateOf(0) }
@@ -88,24 +88,21 @@ class GameScreen : ComponentActivity() {
                             var resultMessage by remember { mutableStateOf("") }
                             var resultColor by remember { mutableStateOf(Color.Black) }
                             var dialogImage by remember { mutableIntStateOf(0) }
-                            var selectedDiceIndex by remember { mutableIntStateOf(-1) }
-
+                            var selectedPlayerDiceIndex by remember { mutableIntStateOf(-1) }
                             var totalRollCount by remember { mutableIntStateOf(0) }
 
 
                             fun calculateScore(dice: List<Int>): Int {
                                 var total = 0
-
                                 for (die in dice) {
                                     total += die
                                 }
-
                                 return total
                             }
 
                             fun scoreTurn() {
                                 playerScore += calculateScore(playerDice)
-  //                   computerPlay()
+  //                    computerPlay()
                                 computerScore += calculateScore(computerDice)
                                 rollCount = 0
 
@@ -135,7 +132,7 @@ class GameScreen : ComponentActivity() {
                                 totalRollCount++
 
                                 playerDice = playerDice.mapIndexed { index, value ->
-                                    if (selectedDiceIndex == index) value else Random.nextInt(1, 7)
+                                    if (selectedPlayerDiceIndex == index) value else Random.nextInt(1, 7)
                                 }
 
                                 computerDice = List(5) { Random.nextInt(1, 7) }
@@ -144,7 +141,7 @@ class GameScreen : ComponentActivity() {
                                 if (playerScore >= targetScore && computerScore >= targetScore) {
                                     scoreTurn()
                                 }
-                                selectedDiceIndex = -1
+                                selectedPlayerDiceIndex = -1
                             }
 
                             fun computerPlay() {
@@ -194,12 +191,12 @@ class GameScreen : ComponentActivity() {
                                             .size(80.dp)
                                             .padding(4.dp)
                                             .border(
-                                                width = if (selectedDiceIndex == index) 4.dp else 0.dp,
-                                                color = if (selectedDiceIndex == index) Color.Green else Color.Transparent
+                                                width = if (selectedPlayerDiceIndex == index) 4.dp else 0.dp,
+                                                color = if (selectedPlayerDiceIndex == index) Color.Green else Color.Transparent
                                             )
                                             .clickable {
                                                 if(totalRollCount != 0){
-                                                    selectedDiceIndex = if(selectedDiceIndex == index ){
+                                                    selectedPlayerDiceIndex = if(selectedPlayerDiceIndex == index ){
                                                         -1
                                                     }else{
                                                         index
@@ -210,7 +207,7 @@ class GameScreen : ComponentActivity() {
                                         contentAlignment = Alignment.Center
                                     ) {
                                         Image(
-                                            painter = painterResource(id = getDiceImage(dice)),
+                                            painter = painterResource(id = if (totalRollCount == 0) R.drawable.dice_6 else getDiceImage(dice)),
                                             contentDescription = "Player Dice",
                                             modifier = Modifier.size(80.dp)
                                         )
@@ -234,7 +231,7 @@ class GameScreen : ComponentActivity() {
                             Row {
                                 computerDice.forEach { dice ->
                                     Image(
-                                        painter = painterResource(id = getDiceImage(dice)),
+                                        painter = painterResource(id = if (totalRollCount == 0) R.drawable.dice_6 else getDiceImage(dice)),
                                         contentDescription = "Computer Dice",
                                         modifier = Modifier.size(80.dp)
                                     )
@@ -326,7 +323,6 @@ fun getDiceImage(value: Int): Int {
         4 -> R.drawable.dice_4
         5 -> R.drawable.dice_5
         else -> R.drawable.dice_6
-
     }
 }
 
