@@ -90,6 +90,8 @@ class GameScreen : ComponentActivity() {
                             var dialogImage by remember { mutableIntStateOf(0) }
                             var selectedPlayerDiceIndex by remember { mutableIntStateOf(-1) }
                             var totalRollCount by remember { mutableIntStateOf(0) }
+                            var playerTurnScore by remember { mutableIntStateOf(0) }
+                            var computerTurnScore by remember { mutableIntStateOf(0) }
 
 
                             fun calculateScore(dice: List<Int>): Int {
@@ -101,10 +103,12 @@ class GameScreen : ComponentActivity() {
                             }
 
                             fun scoreTurn() {
-                                playerScore += calculateScore(playerDice)
+                                playerScore += playerTurnScore
   //                    computerPlay()
-                                computerScore += calculateScore(computerDice)
+                                computerScore +=  computerTurnScore
                                 rollCount = 0
+                                playerTurnScore = 0
+                                computerTurnScore = 0
 
                                 // to check tie break scenario
 //                            computerScore += 55
@@ -136,6 +140,9 @@ class GameScreen : ComponentActivity() {
                                 }
 
                                 computerDice = List(5) { Random.nextInt(1, 7) }
+
+                                playerTurnScore += calculateScore(playerDice)
+                                computerTurnScore += calculateScore(computerDice)
 
                                 // Tie Scenario - update score every roll
                                 if (playerScore >= targetScore && computerScore >= targetScore) {

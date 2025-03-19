@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.dice_w1903951.ui.theme.Dice_w1903951Theme
 
-var targetScore = 50 // Global variable for target score
+var targetScore = 101 // Global variable for target score
 
 var humanWins = 0
 var computerWins = 0
