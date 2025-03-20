@@ -84,15 +84,19 @@ class GameScreen : ComponentActivity() {
                             var playerScore by rememberSaveable { mutableIntStateOf(0) }
                             var computerScore by rememberSaveable { mutableIntStateOf(0) }
                             var rollCount by rememberSaveable { mutableIntStateOf(0) }
+                            var computerRollCount by rememberSaveable { mutableIntStateOf(0) }
                             var showResultDialog by remember { mutableStateOf(false) }
                             var resultTitle by remember { mutableStateOf("") }
                             var resultMessage by remember { mutableStateOf("") }
                             var resultColor by remember { mutableStateOf(Color.Black) }
                             var dialogImage by remember { mutableIntStateOf(0) }
                             var selectedPlayerDiceIndex by rememberSaveable { mutableIntStateOf(-1) }
+                            var selectedComputerDiceIndex by rememberSaveable { mutableIntStateOf(-1) }
                             var totalRollCount by rememberSaveable { mutableIntStateOf(0) }
                             var playerTurnScore by rememberSaveable  { mutableIntStateOf(0) }
                             var computerTurnScore by rememberSaveable { mutableIntStateOf(0) }
+                            var testPlayerRollCount by rememberSaveable { mutableIntStateOf(-1) }
+                            var testComputerRollCount by rememberSaveable { mutableIntStateOf(-1) }
 
 
                             fun calculateScore(dice: List<Int>): Int {
@@ -103,20 +107,37 @@ class GameScreen : ComponentActivity() {
                                 return total
                             }
 
+                            fun computerPlay() {
+                                // random selection of computer re-roll , with ensure the roll or re-roll
+                                if (computerRollCount == 0 || Random.nextBoolean()) {
+
+                                    // random number to keep computer dice
+                                    // random decision to dice a keep
+                                    selectedComputerDiceIndex = if(Random.nextBoolean()) -1 else{Random.nextInt(0, 6)}
+
+                                    computerDice = computerDice.mapIndexed { index, value ->
+                                        if (selectedComputerDiceIndex == index) value else Random.nextInt(1, 7)
+                                    }
+                                    computerRollCount++
+                                    computerScore +=  computerTurnScore
+                                }
+                            }
+
                             fun scoreTurn() {
                                 playerScore += playerTurnScore
-  //                    computerPlay()
-                                computerScore +=  computerTurnScore
+                                while (computerRollCount <3){
+                                    computerPlay()
+                                }
+
+
+                                testPlayerRollCount += rollCount
+                                testComputerRollCount += computerRollCount
+
                                 rollCount = 0
+                                computerRollCount = 0
                                 playerTurnScore = 0
                                 computerTurnScore = 0
 
-                                // to check tie break scenario
-//                            computerScore += 55
-//                            playerScore += 55
-//                            if(playerScore > 150){
-//                                playerScore += 5
-//                            }
 
                                 if (playerScore != computerScore && (playerScore >= targetScore || computerScore >= targetScore)) {
                                     resultTitle =
@@ -131,16 +152,21 @@ class GameScreen : ComponentActivity() {
                                 }
                             }
 
+
+
                             fun rollDice() {
                                 if (rollCount >= 3) return
-                                rollCount++
-                                totalRollCount++
+                               rollCount++
+                               totalRollCount++
 
                                 playerDice = playerDice.mapIndexed { index, value ->
                                     if (selectedPlayerDiceIndex == index) value else Random.nextInt(1, 7)
                                 }
 
-                                computerDice = List(5) { Random.nextInt(1, 7) }
+
+                                if (computerRollCount < 3) {
+                                    computerPlay()
+                                }
 
                                 playerTurnScore += calculateScore(playerDice)
                                 computerTurnScore += calculateScore(computerDice)
@@ -150,18 +176,10 @@ class GameScreen : ComponentActivity() {
                                     scoreTurn()
                                 }
                                 selectedPlayerDiceIndex = -1
+                                selectedComputerDiceIndex = -1
                             }
 
-                            fun computerPlay() {
-                                repeat(2) {
-                                    if (Random.nextBoolean()) {
-                                        val keep = List(5) { Random.nextBoolean() }
-                                        computerDice = computerDice.mapIndexed { index, value ->
-                                            if (keep[index]) value else Random.nextInt(1, 7)
-                                        }
-                                    }
-                                }
-                            }
+
 
                             Row(
                                 modifier = Modifier
@@ -210,6 +228,7 @@ class GameScreen : ComponentActivity() {
                                                         index
                                                     }
                                                 }
+
 
                                             },
                                         contentAlignment = Alignment.Center
@@ -286,6 +305,28 @@ class GameScreen : ComponentActivity() {
                                 Text(
                                     "Computer: $computerScore (+$computerTurnScore)",
                                     style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(40.dp))
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    "Player: $playerScore (Rolls: $rollCount/3) total : $testPlayerRollCount",
+                                    style = TextStyle(
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                )
+                                Text(
+                                    "Computer: $computerScore (Rolls: $computerRollCount/3) total : $testComputerRollCount",
+                                    style = TextStyle(
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
                                 )
                             }
 
