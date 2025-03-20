@@ -270,6 +270,24 @@ class GameScreen : ComponentActivity() {
                                 }
                             }
 
+                            // for debugging purpose
+                            Spacer(modifier = Modifier.height(40.dp))
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    "Player: $playerScore (+$playerTurnScore)",
+                                    style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                                )
+                                Text(
+                                    "Computer: $computerScore (+$computerTurnScore)",
+                                    style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                                )
+                            }
+
                             if (showResultDialog) {
                                 AlertDialog(
                                     onDismissRequest = { },
