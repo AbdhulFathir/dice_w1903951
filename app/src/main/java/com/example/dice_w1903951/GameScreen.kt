@@ -44,9 +44,24 @@ import kotlin.random.Random
 
 
 class GameScreen : ComponentActivity() {
+    private var showResultDialog by mutableStateOf(false)
+    private var resultTitle by mutableStateOf("")
+    private var resultMessage by mutableStateOf("")
+    private var resultColor by mutableStateOf(Color.Black)
+    private var dialogImage by mutableIntStateOf(0)
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Restore state if available
+        if (savedInstanceState != null) {
+            showResultDialog = savedInstanceState.getBoolean("showResultDialog", false)
+            resultTitle = savedInstanceState.getString("resultTitle", "")
+            resultMessage = savedInstanceState.getString("resultMessage", "")
+            resultColor = Color(savedInstanceState.getInt("resultColor"))
+            dialogImage = savedInstanceState.getInt("dialogImage", 0)
+        }
+
         enableEdgeToEdge()
         setContent {
             Dice_w1903951Theme {
@@ -79,16 +94,11 @@ class GameScreen : ComponentActivity() {
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            var playerDice by remember { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
-                            var computerDice by remember { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
+                            var playerDice by rememberSaveable { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
+                            var computerDice by rememberSaveable { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
                             var playerScore by rememberSaveable { mutableIntStateOf(0) }
                             var computerScore by rememberSaveable { mutableIntStateOf(0) }
                             var rollCount by rememberSaveable { mutableIntStateOf(0) }
-                            var showResultDialog by remember { mutableStateOf(false) }
-                            var resultTitle by remember { mutableStateOf("") }
-                            var resultMessage by remember { mutableStateOf("") }
-                            var resultColor by remember { mutableStateOf(Color.Black) }
-                            var dialogImage by remember { mutableIntStateOf(0) }
                             var selectedPlayerDiceIndex by rememberSaveable { mutableIntStateOf(-1) }
                             var totalRollCount by rememberSaveable { mutableIntStateOf(0) }
                             var playerTurnScore by rememberSaveable  { mutableIntStateOf(0) }
@@ -337,6 +347,18 @@ class GameScreen : ComponentActivity() {
             }
         }
     }
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("showResultDialog", showResultDialog)
+        outState.putString("resultTitle", resultTitle)
+        outState.putString("resultMessage", resultMessage)
+        outState.putInt("resultColor", resultColor.hashCode())
+        outState.putInt("dialogImage", dialogImage)
+    }
+
+
 }
 
 
