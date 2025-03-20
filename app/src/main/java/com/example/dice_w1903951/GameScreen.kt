@@ -28,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -80,18 +81,18 @@ class GameScreen : ComponentActivity() {
                         ) {
                             var playerDice by remember { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
                             var computerDice by remember { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
-                            var playerScore by remember { mutableIntStateOf(0) }
-                            var computerScore by remember { mutableIntStateOf(0) }
+                            var playerScore by rememberSaveable { mutableIntStateOf(0) }
+                            var computerScore by rememberSaveable { mutableIntStateOf(0) }
                             var rollCount by remember { mutableIntStateOf(0) }
                             var showResultDialog by remember { mutableStateOf(false) }
                             var resultTitle by remember { mutableStateOf("") }
                             var resultMessage by remember { mutableStateOf("") }
                             var resultColor by remember { mutableStateOf(Color.Black) }
                             var dialogImage by remember { mutableIntStateOf(0) }
-                            var selectedPlayerDiceIndex by remember { mutableIntStateOf(-1) }
-                            var totalRollCount by remember { mutableIntStateOf(0) }
-                            var playerTurnScore by remember { mutableIntStateOf(0) }
-                            var computerTurnScore by remember { mutableIntStateOf(0) }
+                            var selectedPlayerDiceIndex by rememberSaveable { mutableIntStateOf(-1) }
+                            var totalRollCount by rememberSaveable { mutableIntStateOf(0) }
+                            var playerTurnScore by rememberSaveable  { mutableIntStateOf(0) }
+                            var computerTurnScore by rememberSaveable { mutableIntStateOf(0) }
 
 
                             fun calculateScore(dice: List<Int>): Int {
