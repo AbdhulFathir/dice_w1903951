@@ -309,27 +309,21 @@ class GameScreen : ComponentActivity() {
                                 )
                             }
                             Spacer(modifier = Modifier.height(40.dp))
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text(
-                                    "Player: $playerScore (Rolls: $rollCount/3) total : $testPlayerRollCount",
-                                    style = TextStyle(
-                                        fontSize = 20.sp,
-                                        fontWeight = FontWeight.Bold
-                                    )
+                            Text(
+                                "Player: $playerScore (Rolls: $rollCount/3) total : $testPlayerRollCount",
+                                style = TextStyle(
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold
                                 )
-                                Text(
-                                    "Computer: $computerScore (Rolls: $computerRollCount/3) total : $testComputerRollCount",
-                                    style = TextStyle(
-                                        fontSize = 20.sp,
-                                        fontWeight = FontWeight.Bold
-                                    )
+                            )
+                            Spacer(modifier = Modifier.height(40.dp))
+                            Text(
+                                "Computer: $computerScore (Rolls: $computerRollCount/3) total : $testComputerRollCount",
+                                style = TextStyle(
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold
                                 )
-                            }
+                            )
 
                             if (showResultDialog) {
                                 AlertDialog(
