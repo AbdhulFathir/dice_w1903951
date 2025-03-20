@@ -203,7 +203,7 @@ class GameScreen : ComponentActivity() {
                                                 color = if (selectedPlayerDiceIndex == index) Color.Green else Color.Transparent
                                             )
                                             .clickable {
-                                                if(totalRollCount != 0){
+                                                if(totalRollCount != 0 && (rollCount == 1 ||rollCount == 2 )){
                                                     selectedPlayerDiceIndex = if(selectedPlayerDiceIndex == index ){
                                                         -1
                                                     }else{
