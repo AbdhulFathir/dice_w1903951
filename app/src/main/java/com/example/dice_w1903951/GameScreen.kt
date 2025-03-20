@@ -95,8 +95,9 @@ class GameScreen : ComponentActivity() {
                             var totalRollCount by rememberSaveable { mutableIntStateOf(0) }
                             var playerTurnScore by rememberSaveable  { mutableIntStateOf(0) }
                             var computerTurnScore by rememberSaveable { mutableIntStateOf(0) }
-                            var testPlayerRollCount by rememberSaveable { mutableIntStateOf(0) }
-                            var testComputerRollCount by rememberSaveable { mutableIntStateOf(0) }
+                            var testPlayerRollCount by rememberSaveable { mutableIntStateOf(0) } // total rolls of player (for debugging)
+                            var testComputerRollCount by rememberSaveable { mutableIntStateOf(0) } // total rolls of computer (for debugging)
+                            var isGameOver by rememberSaveable { mutableStateOf(false) }  // for game status
 
 
                             fun calculateScore(dice: List<Int>): Int {
@@ -148,7 +149,9 @@ class GameScreen : ComponentActivity() {
                                         if (playerScore >= computerScore) Color.Green else Color.Red
                                     if (playerScore >= computerScore) humanWins++ else computerWins++
                                     dialogImage = if (playerScore >= computerScore) R.drawable.ic_win_image else  R.drawable.ic_lose_image
+                                    isGameOver = true
                                     showResultDialog = true
+
                                 }
                             }
 
@@ -256,18 +259,7 @@ class GameScreen : ComponentActivity() {
                                             .border(
                                                 width = if (selectedComputerDiceIndex == index) 4.dp else 0.dp,
                                                 color = if (selectedComputerDiceIndex == index) Color.Red else Color.Transparent
-                                            )
-                                            .clickable {
-                                                if(totalRollCount != 0 && (computerRollCount == 1 ||computerRollCount == 2 )){
-                                                    selectedComputerDiceIndex = if(selectedComputerDiceIndex == index ){
-                                                        -1
-                                                    }else{
-                                                        index
-                                                    }
-                                                }
-
-
-                                            },
+                                            ),
                                         contentAlignment = Alignment.Center
                                     ) {
                                     Image(
@@ -287,7 +279,7 @@ class GameScreen : ComponentActivity() {
                                         if (playerRollCount < 3) rollDice()
                                         if (playerRollCount == 3) scoreTurn()
                                     },
-                                    enabled = playerRollCount < 3
+//                                    enabled = playerRollCount < 3
                                 ) {
                                     Text("Throw")
                                 }
