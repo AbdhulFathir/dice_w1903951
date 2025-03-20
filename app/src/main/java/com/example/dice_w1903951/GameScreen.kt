@@ -83,7 +83,7 @@ class GameScreen : ComponentActivity() {
                             var computerDice by remember { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
                             var playerScore by rememberSaveable { mutableIntStateOf(0) }
                             var computerScore by rememberSaveable { mutableIntStateOf(0) }
-                            var rollCount by rememberSaveable { mutableIntStateOf(0) }
+                            var playerRollCount by rememberSaveable { mutableIntStateOf(0) }
                             var computerRollCount by rememberSaveable { mutableIntStateOf(0) }
                             var showResultDialog by remember { mutableStateOf(false) }
                             var resultTitle by remember { mutableStateOf("") }
@@ -133,7 +133,7 @@ class GameScreen : ComponentActivity() {
 
                                 computerScore += computerTurnScore
 
-                                rollCount = 0
+                                playerRollCount = 0
                                 computerRollCount = 0
                                 playerTurnScore = 0
                                 computerTurnScore = 0
@@ -155,8 +155,8 @@ class GameScreen : ComponentActivity() {
 
 
                             fun rollDice() {
-                                if (rollCount >= 3) return
-                               rollCount++
+                                if (playerRollCount >= 3) return
+                               playerRollCount++
                                testPlayerRollCount ++
                                totalRollCount++
 
@@ -222,7 +222,7 @@ class GameScreen : ComponentActivity() {
                                                 color = if (selectedPlayerDiceIndex == index) Color.Green else Color.Transparent
                                             )
                                             .clickable {
-                                                if(totalRollCount != 0 && (rollCount == 1 ||rollCount == 2 )){
+                                                if(totalRollCount != 0 && (playerRollCount == 1 ||playerRollCount == 2 )){
                                                     selectedPlayerDiceIndex = if(selectedPlayerDiceIndex == index ){
                                                         -1
                                                     }else{
@@ -243,26 +243,39 @@ class GameScreen : ComponentActivity() {
                                 }
                             }
 
-//                            Row {
-//                                playerDice.forEach { dice ->
-//                                    Image(
-//                                        painter = painterResource(id = getDiceImage(dice)),
-//                                        contentDescription = "Player Dice",
-//                                        modifier = Modifier.size(80.dp)
-//                                    )
-//                                }
-//                            }
 
                             Spacer(modifier = Modifier.height(30.dp))
                             Text("Computer's Dice", fontSize = 24.sp, fontWeight = FontWeight.Bold)
                             Spacer(modifier = Modifier.height(10.dp))
                             Row {
-                                computerDice.forEach { dice ->
+                                computerDice.forEachIndexed { index, dice ->
+                                    Box(
+                                        modifier = Modifier
+                                            .size(80.dp)
+                                            .padding(4.dp)
+                                            .border(
+                                                width = if (selectedComputerDiceIndex == index) 4.dp else 0.dp,
+                                                color = if (selectedComputerDiceIndex == index) Color.Red else Color.Transparent
+                                            )
+                                            .clickable {
+                                                if(totalRollCount != 0 && (computerRollCount == 1 ||computerRollCount == 2 )){
+                                                    selectedComputerDiceIndex = if(selectedComputerDiceIndex == index ){
+                                                        -1
+                                                    }else{
+                                                        index
+                                                    }
+                                                }
+
+
+                                            },
+                                        contentAlignment = Alignment.Center
+                                    ) {
                                     Image(
                                         painter = painterResource(id = if (totalRollCount == 0) R.drawable.dice_6 else getDiceImage(dice)),
                                         contentDescription = "Computer Dice",
                                         modifier = Modifier.size(80.dp)
                                     )
+                                    }
                                 }
                             }
                             Spacer(modifier = Modifier.height(40.dp))
@@ -271,15 +284,15 @@ class GameScreen : ComponentActivity() {
                                     onClick = {
 //                playerDice = List(5) { Random.nextInt(1, 7) }
 //                computerDice = List(5) { Random.nextInt(1, 7) }
-                                        if (rollCount < 3) rollDice()
-                                        if (rollCount == 3) scoreTurn()
+                                        if (playerRollCount < 3) rollDice()
+                                        if (playerRollCount == 3) scoreTurn()
                                     },
-                                    enabled = rollCount < 3
+                                    enabled = playerRollCount < 3
                                 ) {
                                     Text("Throw")
                                 }
                                 Spacer(modifier = Modifier.width(20.dp))
-                                Button(onClick = { scoreTurn() }, enabled = rollCount in 1..2) {
+                                Button(onClick = { scoreTurn() }, enabled = playerRollCount in 1..2) {
                                     Text("Score")
                                 }
                                 Spacer(modifier = Modifier.width(20.dp))
@@ -310,7 +323,7 @@ class GameScreen : ComponentActivity() {
                             }
                             Spacer(modifier = Modifier.height(40.dp))
                             Text(
-                                "Player: $playerScore (Rolls: $rollCount/3) total : $testPlayerRollCount",
+                                "Player: $playerScore (Rolls: $playerRollCount/3) total : $testPlayerRollCount",
                                 style = TextStyle(
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight.Bold
