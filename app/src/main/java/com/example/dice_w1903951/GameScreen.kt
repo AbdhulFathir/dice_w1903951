@@ -83,7 +83,7 @@ class GameScreen : ComponentActivity() {
                             var computerDice by remember { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
                             var playerScore by rememberSaveable { mutableIntStateOf(0) }
                             var computerScore by rememberSaveable { mutableIntStateOf(0) }
-                            var rollCount by remember { mutableIntStateOf(0) }
+                            var rollCount by rememberSaveable { mutableIntStateOf(0) }
                             var showResultDialog by remember { mutableStateOf(false) }
                             var resultTitle by remember { mutableStateOf("") }
                             var resultMessage by remember { mutableStateOf("") }
