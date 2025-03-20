@@ -95,8 +95,8 @@ class GameScreen : ComponentActivity() {
                             var totalRollCount by rememberSaveable { mutableIntStateOf(0) }
                             var playerTurnScore by rememberSaveable  { mutableIntStateOf(0) }
                             var computerTurnScore by rememberSaveable { mutableIntStateOf(0) }
-                            var testPlayerRollCount by rememberSaveable { mutableIntStateOf(-1) }
-                            var testComputerRollCount by rememberSaveable { mutableIntStateOf(-1) }
+                            var testPlayerRollCount by rememberSaveable { mutableIntStateOf(0) }
+                            var testComputerRollCount by rememberSaveable { mutableIntStateOf(0) }
 
 
                             fun calculateScore(dice: List<Int>): Int {
@@ -118,20 +118,20 @@ class GameScreen : ComponentActivity() {
                                     computerDice = computerDice.mapIndexed { index, value ->
                                         if (selectedComputerDiceIndex == index) value else Random.nextInt(1, 7)
                                     }
+                                    computerTurnScore += calculateScore(computerDice)
                                     computerRollCount++
-                                    computerScore +=  computerTurnScore
+                                    testComputerRollCount++
                                 }
                             }
 
                             fun scoreTurn() {
                                 playerScore += playerTurnScore
+
                                 while (computerRollCount <3){
                                     computerPlay()
                                 }
 
-
-                                testPlayerRollCount += rollCount
-                                testComputerRollCount += computerRollCount
+                                computerScore += computerTurnScore
 
                                 rollCount = 0
                                 computerRollCount = 0
@@ -157,6 +157,7 @@ class GameScreen : ComponentActivity() {
                             fun rollDice() {
                                 if (rollCount >= 3) return
                                rollCount++
+                               testPlayerRollCount ++
                                totalRollCount++
 
                                 playerDice = playerDice.mapIndexed { index, value ->
@@ -169,7 +170,7 @@ class GameScreen : ComponentActivity() {
                                 }
 
                                 playerTurnScore += calculateScore(playerDice)
-                                computerTurnScore += calculateScore(computerDice)
+
 
                                 // Tie Scenario - update score every roll
                                 if (playerScore >= targetScore && computerScore >= targetScore) {
