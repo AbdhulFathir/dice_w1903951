@@ -136,7 +136,7 @@ class GameScreen : ComponentActivity() {
 
                                     // random number to keep computer dice
                                     // random decision to dice a keep
-                                    selectedComputerDiceIndex = if(Random.nextBoolean()) -1 else{Random.nextInt(0, 6)}
+                                    selectedComputerDiceIndex = if(Random.nextBoolean()) -1 else{Random.nextInt(0, 5)}
 
                                     computerDice = computerDice.mapIndexed { index, value ->
                                         if (selectedComputerDiceIndex == index) value else Random.nextInt(1, 7)
@@ -160,6 +160,16 @@ class GameScreen : ComponentActivity() {
                                 }
 
                                 computerScore += computerTurnScore
+
+
+                                // to check tie break scenario
+
+
+                            computerScore += 55
+                            playerScore += 55
+                            if(playerScore > 150){
+                                playerScore += 5
+                            }
 
                                 playerRollCount = 0
                                 computerRollCount = 0
