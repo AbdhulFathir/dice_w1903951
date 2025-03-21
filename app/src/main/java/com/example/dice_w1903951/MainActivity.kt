@@ -1,3 +1,5 @@
+// main app
+
 package com.example.dice_w1903951
 import android.content.Intent
 import android.os.Bundle
