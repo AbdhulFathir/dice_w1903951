@@ -1,6 +1,7 @@
 package com.example.dice_w1903951
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -81,10 +82,12 @@ class GameScreen : ComponentActivity() {
                         ) {
                             var playerDice by remember { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
                             var computerDice by remember { mutableStateOf(List(5) { Random.nextInt(1, 7) }) }
-                            var playerScore by rememberSaveable { mutableIntStateOf(0) }
-                            var computerScore by rememberSaveable { mutableIntStateOf(0) }
-                            var playerRollCount by rememberSaveable { mutableIntStateOf(0) }
-                            var computerRollCount by rememberSaveable { mutableIntStateOf(0) }
+                            var playerScore by rememberSaveable { mutableIntStateOf(0) } // total player score
+                            var computerScore by rememberSaveable { mutableIntStateOf(0) }  // total computer score
+                            var playerTurnScore by rememberSaveable  { mutableIntStateOf(0) } // Temporary score before adding to total
+                            var computerTurnScore by rememberSaveable { mutableIntStateOf(0) } // Temporary score before adding to total
+                            var playerRollCount by rememberSaveable { mutableIntStateOf(0) } //
+                            var computerRollCount by rememberSaveable { mutableIntStateOf(0) } //
                             var showResultDialog by remember { mutableStateOf(false) }
                             var resultTitle by remember { mutableStateOf("") }
                             var resultMessage by remember { mutableStateOf("") }
@@ -93,8 +96,6 @@ class GameScreen : ComponentActivity() {
                             var selectedPlayerDiceIndex by rememberSaveable { mutableIntStateOf(-1) }
                             var selectedComputerDiceIndex by rememberSaveable { mutableIntStateOf(-1) }
                             var totalRollCount by rememberSaveable { mutableIntStateOf(0) }
-                            var playerTurnScore by rememberSaveable  { mutableIntStateOf(0) }
-                            var computerTurnScore by rememberSaveable { mutableIntStateOf(0) }
                             var testPlayerRollCount by rememberSaveable { mutableIntStateOf(0) } // total rolls of player (for debugging)
                             var testComputerRollCount by rememberSaveable { mutableIntStateOf(0) } // total rolls of computer (for debugging)
                             var isGameOver by rememberSaveable { mutableStateOf(false) }  // for game status
@@ -158,7 +159,7 @@ class GameScreen : ComponentActivity() {
 
 
                             fun rollDice() {
-                                if (playerRollCount >= 3) return
+                               if (playerRollCount >= 3) return
                                playerRollCount++
                                testPlayerRollCount ++
                                totalRollCount++
@@ -225,12 +226,13 @@ class GameScreen : ComponentActivity() {
                                                 color = if (selectedPlayerDiceIndex == index) Color.Green else Color.Transparent
                                             )
                                             .clickable {
-                                                if(totalRollCount != 0 && (playerRollCount == 1 ||playerRollCount == 2 )){
-                                                    selectedPlayerDiceIndex = if(selectedPlayerDiceIndex == index ){
-                                                        -1
-                                                    }else{
-                                                        index
-                                                    }
+                                                if (totalRollCount != 0 && (playerRollCount == 1 || playerRollCount == 2)) {
+                                                    selectedPlayerDiceIndex =
+                                                        if (selectedPlayerDiceIndex == index) {
+                                                            -1
+                                                        } else {
+                                                            index
+                                                        }
                                                 }
 
 
