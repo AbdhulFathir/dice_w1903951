@@ -130,7 +130,12 @@ class GameScreen : ComponentActivity() {
                                 playerScore += playerTurnScore
 
                                 while (computerRollCount <3){
-                                    computerPlay()
+                                    if(computerRollCount <playerRollCount){
+                                        computerPlay()
+                                    }else{
+                                        break
+                                    }
+
                                 }
 
                                 computerScore += computerTurnScore
