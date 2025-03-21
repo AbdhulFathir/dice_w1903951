@@ -165,11 +165,11 @@ class GameScreen : ComponentActivity() {
                                 // to check tie break scenario
 
 
-                            computerScore += 55
-                            playerScore += 55
-                            if(playerScore > 150){
-                                playerScore += 5
-                            }
+//                            computerScore += 55
+//                            playerScore += 55
+//                            if(playerScore > 150){
+//                                playerScore += 5
+//                            }
 
                                 playerRollCount = 0
                                 computerRollCount = 0
