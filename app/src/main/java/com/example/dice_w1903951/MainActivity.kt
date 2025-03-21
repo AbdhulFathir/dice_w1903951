@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
@@ -55,20 +57,19 @@ class MainActivity : ComponentActivity() {
                             var showTargetScoreDialog by remember { mutableStateOf(false) }
 
                             Text("Dice Game", fontSize = 32.sp, modifier = Modifier.padding(bottom = 20.dp))
-                            Button(onClick = {
+
+                            CustomButton("New Game") {
                                 val intent = Intent(this@MainActivity, GameScreen::class.java)
                                 startActivity(intent)
-                            }) {
-                                Text("New Game")
                             }
                             Spacer(modifier = Modifier.height(20.dp))
-                            Button(onClick = { showTargetScoreDialog = true }) {
-                                Text("Set Target Score")
-                            }
+
+                            CustomButton("Set Target Score") { showTargetScoreDialog = true }
+
                             Spacer(modifier = Modifier.height(20.dp))
-                            Button(onClick = { showAboutDialog = true }) {
-                                Text("About")
-                            }
+
+                            CustomButton("About") { showAboutDialog = true }
+
 
                             // About Dialog
                             if (showAboutDialog) {
@@ -105,6 +106,45 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+
+@Composable
+fun CustomButton(text: String, onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .width(200.dp)
+            .height(50.dp),
+        shape = RoundedCornerShape(20.dp)
+    ) {
+        Text(text, fontSize = 18.sp)
+    }
+}
+
+@Composable
+fun AboutDialog(onDismissRequest: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = { Text("About", fontSize = 20.sp) },
+        text = {
+            Column {
+                Text("Student Name: John Doe")
+                Text("Student ID: w1903051")
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    "I confirm that I understand what plagiarism is and have read and understood the section on Assessment Offences in the Essential Information for Students. The work that I have submitted is entirely my own. Any work from other authors is duly referenced and acknowledged.",
+                    textAlign = TextAlign.Justify
+                )
+            }
+        },
+        confirmButton = {
+            Button(onClick = onDismissRequest) { Text("OK") }
+        }
+    )
+}
+
+
+
 
 @Composable
 fun TargetScoreDialog(onDismissRequest: () -> Unit) {
