@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,8 +54,8 @@ class MainActivity : ComponentActivity() {
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            var showAboutDialog by remember { mutableStateOf(false) }
-                            var showTargetScoreDialog by remember { mutableStateOf(false) }
+                            var showAboutDialog by rememberSaveable { mutableStateOf(false) }
+                            var showTargetScoreDialog by rememberSaveable { mutableStateOf(false) }
 
                             Text("Dice Game", fontSize = 32.sp, modifier = Modifier.padding(bottom = 20.dp))
 
@@ -73,26 +74,27 @@ class MainActivity : ComponentActivity() {
 
                             // About Dialog
                             if (showAboutDialog) {
-                                AlertDialog(
-                                    onDismissRequest = { showAboutDialog = false },
-                                    title = { Text("About") },
-                                    text = {
-                                        Column {
-                                            Text("Student Name: John Doe")
-                                            Text("Student ID: w1903051")
-                                            Spacer(modifier = Modifier.height(10.dp))
-                                            Text(
-                                                "I confirm that I understand what plagiarism is and have read and understood the section on Assessment Offences in the Essential Information for Students. The work that I have submitted is entirely my own. Any work from other authors is duly referenced and acknowledged.",
-                                                textAlign = TextAlign.Justify
-                                            )
-                                        }
-                                    },
-                                    confirmButton = {
-                                        Button(onClick = { showAboutDialog = false }) {
-                                            Text("OK")
-                                        }
-                                    }
-                                )
+                                AboutDialog(onDismissRequest = {showAboutDialog = false})
+//                                AlertDialog(
+//                                    onDismissRequest = { showAboutDialog = false },
+//                                    title = { Text("About") },
+//                                    text = {
+//                                        Column {
+//                                            Text("Student Name: John Doe")
+//                                            Text("Student ID: w1903051")
+//                                            Spacer(modifier = Modifier.height(10.dp))
+//                                            Text(
+//                                                "I confirm that I understand what plagiarism is and have read and understood the section on Assessment Offences in the Essential Information for Students. The work that I have submitted is entirely my own. Any work from other authors is duly referenced and acknowledged.",
+//                                                textAlign = TextAlign.Justify
+//                                            )
+//                                        }
+//                                    },
+//                                    confirmButton = {
+//                                        Button(onClick = { showAboutDialog = false }) {
+//                                            Text("OK")
+//                                        }
+//                                    }
+//                                )
                             }
 
                             // Target Score Dialog
