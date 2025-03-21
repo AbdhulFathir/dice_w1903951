@@ -52,6 +52,16 @@ class GameScreen : ComponentActivity() {
     private var resultColor by mutableStateOf(Color.Black)
     private var dialogImage by mutableIntStateOf(0)
 
+    // Reference: https://developer.android.com/guide/fragments/saving-state
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("showResultDialog", showResultDialog)
+        outState.putString("resultTitle", resultTitle)
+        outState.putString("resultMessage", resultMessage)
+        outState.putInt("resultColor", resultColor.hashCode())
+        outState.putInt("dialogImage", dialogImage)
+    }
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -395,16 +405,6 @@ class GameScreen : ComponentActivity() {
                 )
             }
         }
-    }
-
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putBoolean("showResultDialog", showResultDialog)
-        outState.putString("resultTitle", resultTitle)
-        outState.putString("resultMessage", resultMessage)
-        outState.putInt("resultColor", resultColor.hashCode())
-        outState.putInt("dialogImage", dialogImage)
     }
 
 
