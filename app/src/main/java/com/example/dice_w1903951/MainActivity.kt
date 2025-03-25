@@ -130,7 +130,7 @@ fun AboutDialog(onDismissRequest: () -> Unit) {
         title = { Text("About", fontSize = 20.sp) },
         text = {
             Column {
-                Text("Student Name: John Doe")
+                Text("Student Name: Abdhul Fathir")
                 Text("Student ID: w1903051")
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
